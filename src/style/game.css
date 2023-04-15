@@ -6,7 +6,6 @@
   margin-right: auto;
   top: 50%;
   transform: translateY(-50%);
-  max-width: 500px;
 }
 .grid-container {
   display: grid;
@@ -16,6 +15,7 @@
   max-width: 450px;
   height: 450px;
   max-height: 450px;
+  margin: auto;
 }
 .grid-item {
   border: 1px solid rgba(0, 0, 0, 0.8);
@@ -42,4 +42,70 @@
 .field-X {
   color: #b7ebff;
   text-shadow: 2px 2px 8px #5cb4e2;
+}
+
+.player-bar {
+  display: flex;
+  max-width: 600px;
+  margin: auto;
+}
+.player {
+  margin: 0px auto;
+  font-size: 46px;
+}
+.player p {
+  margin-top: 0px;
+  font-weight: bold;
+}
+.player-bar span {
+  font-size: 86px;
+}
+
+.player-first {
+  color: #b7ebff;
+  text-shadow: 2px 2px 8px #5cb4e2;
+}
+.player-second {
+  color: antiquewhite;
+  text-shadow: 2px 2px 8px #ffae00;
+}
+
+.active p {
+  box-shadow: 0 15px 5px -3px #a93fff;
+}
+
+.winner-bar {
+  font-size: 75px;
+  color: #ffff00;
+  text-shadow: 2px 2px 8px #c84f32;
+  text-align: center;
+  transition: 2s;
+}
+.animation {
+  animation: winneranimation 1.4s linear;
+}
+.winner-bar p {
+  margin-bottom: 0%;
+  margin-top: 0%;
+}
+
+@keyframes winneranimation {
+  0% {
+    transform: translateY(-300%);
+  }
+  20% {
+    transform: translateY(0%);
+  }
+  40% {
+    transform: translateY(-100%);
+  }
+  60% {
+    transform: translateY(0%);
+  }
+  80% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
 }

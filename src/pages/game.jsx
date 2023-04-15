@@ -1,24 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../style/game.css";
 import { useParams } from "react-router-dom";
 import Field from "../components/field";
+import PlayerBar from "../components/playerBar";
+import WinnerBar from "../components/winnerBar";
 
-const Game = (e) => {
+const Game = () => {
   const { gameType } = useParams();
+  const [winner, setWinner] = useState({ player: "", winner: false });
   const [historyMoves, setHistoryMoves] = useState([]);
   const [symbol, setSymbol] = useState("X");
-  const [player, setPlayer] = useState([
+  const winningCombinations = [
+    [1, 2, 3],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7],
+  ];
+  const [players, setPlayer] = useState([
     {
       id: "1",
       playerMoves: [],
       playerSymbol: "X",
       move: true,
+      result: 0,
     },
     {
       id: "2",
       playerMoves: [],
       playerSymbol: "O",
       move: false,
+      result: 0,
     },
   ]);
 
@@ -33,9 +46,10 @@ const Game = (e) => {
     { id: 8, field: "" },
     { id: 9, field: "" },
   ]);
-  console.log(gameType);
 
   const handleClick = (id, field) => {
+    console.log(winner);
+    if (winner.winner == true) return console.log("Winner already exist");
     if (field != "") return console.log("field must be empty");
     setFields((prevState) => {
       return prevState.map((field) => {
@@ -47,8 +61,6 @@ const Game = (e) => {
 
     handlePlayer(id);
     setHistoryMoves((prevHistory) => [...prevHistory, id]);
-
-    console.log(historyMoves);
     setSymbol((prevState) => (prevState == "X" ? "O" : "X"));
   };
 
@@ -64,11 +76,34 @@ const Game = (e) => {
           : { ...player, move: !player.move };
       });
     });
-    console.log(player);
+  };
+
+  useEffect(() => {
+    let lastPlayerMoves = players.find((player) => player.move === false);
+    checkWinner(lastPlayerMoves.playerMoves, lastPlayerMoves.id);
+  }, [players]);
+
+  const checkWinner = (playerCombinations, id) => {
+    let check = false;
+    for (let combination of winningCombinations) {
+      check = combination.every((field) => playerCombinations.includes(field));
+      if (check == true)
+        setWinner((prevState) => {
+          return { ...prevState, player: id, winner: true };
+        });
+    }
   };
 
   return (
     <div className="game-container">
+      <div className="winner-bar ">
+        <WinnerBar winner={winner.winner} player={winner.player} />
+      </div>
+      <div className="player-bar">
+        {players.map((player) => (
+          <PlayerBar id={player.id} result={player.result} move={player.move} />
+        ))}
+      </div>
       <div className="grid-container">
         {fields.map((field) => (
           <Field id={field.id} field={field.field} handleClick={handleClick} />
