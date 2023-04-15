@@ -1,0 +1,35 @@
+@font-face {
+  font-family: samurai;
+  src: url("../fonts/SamuraiBlast-YznGj.ttf");
+}
+
+.home-section {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+}
+.home-section button {
+  font-family: "samurai";
+  display: block;
+  background-color: #ffcb01;
+  color: #f5ffff;
+  outline: none;
+  border: none;
+  border-radius: 14px;
+  font-size: 28px;
+  margin: 20px auto;
+  cursor: pointer;
+  padding: 20px 30px;
+  -webkit-box-shadow: 0px 0px 39px 11px #371f2f;
+  -moz-box-shadow: 0px 0px 39px 11px #371f2f;
+  box-shadow: 0px 0px 39px 11px #371f2f;
+  transition: 1s;
+}
+.home-section button:hover {
+  box-shadow: 0px 0px 39px 11px #ffae00;
+}
