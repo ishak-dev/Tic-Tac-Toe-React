@@ -5,7 +5,7 @@ import Field from "../components/field";
 
 const Game = (e) => {
   const { gameType } = useParams();
-  let historyMoves = [];
+  const [historyMoves, setHistoryMoves] = useState([]);
   const [symbol, setSymbol] = useState("X");
   const [player, setPlayer] = useState([
     {
@@ -35,7 +35,8 @@ const Game = (e) => {
   ]);
   console.log(gameType);
 
-  const handleClick = (id) => {
+  const handleClick = (id, field) => {
+    if (field != "") return console.log("field must be empty");
     setFields((prevState) => {
       return prevState.map((field) => {
         return id == field.id && field.field == ""
@@ -43,8 +44,11 @@ const Game = (e) => {
           : field;
       });
     });
-    !historyMoves.includes(id) && handlePlayer(id);
-    historyMoves.push(id);
+
+    handlePlayer(id);
+    setHistoryMoves((prevHistory) => [...prevHistory, id]);
+
+    console.log(historyMoves);
     setSymbol((prevState) => (prevState == "X" ? "O" : "X"));
   };
 
