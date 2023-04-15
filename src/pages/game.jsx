@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "../style/game.css";
 import { useParams } from "react-router-dom";
+import { GiBolas } from "react-icons/gi";
 import Field from "../components/field";
 import PlayerBar from "../components/playerBar";
 import WinnerBar from "../components/winnerBar";
 
 const Game = () => {
   const { gameType } = useParams();
-  const [winner, setWinner] = useState({ player: "", winner: false });
+  const [winner, setWinner] = useState({ player: "", winner: "" });
   const [historyMoves, setHistoryMoves] = useState([]);
   const [symbol, setSymbol] = useState("X");
   const winningCombinations = [
     [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
     [1, 4, 7],
     [2, 5, 8],
     [3, 6, 9],
@@ -24,14 +27,18 @@ const Game = () => {
       playerMoves: [],
       playerSymbol: "X",
       move: true,
-      result: 0,
+      result: localStorage.getItem("player1")
+        ? localStorage.getItem("player1")
+        : 0,
     },
     {
       id: "2",
       playerMoves: [],
       playerSymbol: "O",
       move: false,
-      result: 0,
+      result: localStorage.getItem("player2")
+        ? localStorage.getItem("player2")
+        : 0,
     },
   ]);
 
@@ -80,18 +87,50 @@ const Game = () => {
 
   useEffect(() => {
     let lastPlayerMoves = players.find((player) => player.move === false);
-    checkWinner(lastPlayerMoves.playerMoves, lastPlayerMoves.id);
+    checkWinner(
+      lastPlayerMoves.playerMoves,
+      lastPlayerMoves.id,
+      lastPlayerMoves.result
+    );
   }, [players]);
 
-  const checkWinner = (playerCombinations, id) => {
+  const checkWinner = (playerCombinations, id, result) => {
     let check = false;
     for (let combination of winningCombinations) {
       check = combination.every((field) => playerCombinations.includes(field));
-      if (check == true)
+      if (check == true) {
         setWinner((prevState) => {
           return { ...prevState, player: id, winner: true };
         });
+        result++;
+        localStorage.setItem(`player${id}`, result);
+        break;
+      }
+      if (historyMoves.length == 9) {
+        console.log(historyMoves);
+        setWinner((prevState) => {
+          return { ...prevState, player: "none", winner: false };
+        });
+        break;
+      }
     }
+  };
+
+  const resetGame = () => {
+    setPlayer((prevState) => {
+      return prevState.map((player) => {
+        return { ...player, playerMoves: [] };
+      });
+    });
+    setFields((prevState) => {
+      return prevState.map((field) => {
+        return { ...field, field: "" };
+      });
+    });
+    setWinner((prevState) => {
+      return { ...prevState, player: "", winner: "" };
+    });
+    setHistoryMoves([]);
   };
 
   return (
@@ -108,6 +147,9 @@ const Game = () => {
         {fields.map((field) => (
           <Field id={field.id} field={field.field} handleClick={handleClick} />
         ))}
+      </div>
+      <div className="reset-section">
+        <GiBolas className="reset-icon" onClick={resetGame} />
       </div>
     </div>
   );

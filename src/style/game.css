@@ -109,3 +109,20 @@
     transform: translateY(0%);
   }
 }
+
+.reset-section {
+  text-align: center;
+  margin-top: 25px;
+}
+.reset-icon {
+  height: 65px;
+  width: 65px;
+
+  cursor: pointer;
+  background-image: linear-gradient(to bottom left, #2f106e, #7841d2);
+  border-radius: 50%;
+  padding: 10px;
+  color: #ffff00;
+
+  box-shadow: 0px 0px 29px 3px #ffae00;
+}
