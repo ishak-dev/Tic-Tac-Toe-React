@@ -1,3 +1,8 @@
+@font-face {
+  font-family: samurai;
+  src: url("./fonts/SamuraiBlast-YznGj.ttf");
+}
+
 * {
   box-sizing: border-box;
 }
@@ -8,4 +13,5 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
+  font-family: "samurai";
 }

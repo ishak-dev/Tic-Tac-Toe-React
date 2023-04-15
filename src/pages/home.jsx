@@ -6,9 +6,7 @@ const Home = () => {
   return (
     <div className="home-section">
       <button className="one-player-btn btn">
-        <Link to="game" params={{ gameType: "onePlayer" }}>
-          One Player
-        </Link>
+        <Link to="game/newGame">One Player</Link>
       </button>
       <button className="two-players-btn btn">
         <Link to="game" params={{ game: "twoPlayers" }} />
