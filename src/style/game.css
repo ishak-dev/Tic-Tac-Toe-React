@@ -155,3 +155,9 @@
     font-size: 2.475rem;
   }
 }
+
+@media only screen and (max-height: 780px) {
+  .grid-container {
+    height: 350px;
+  }
+}

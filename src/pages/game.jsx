@@ -162,25 +162,47 @@ const Game = () => {
   };
 
   const undo = () => {
-    const lastMoveO = historyMoves.pop();
-    const lastMoveX = historyMoves.pop();
-
-    setFields((prevState) => {
-      return prevState.map((field) => {
-        return lastMoveX == field.id || lastMoveO == field.id
-          ? { ...field, field: "" }
-          : field;
-      });
-    });
     setPlayer((prevState) => {
       return prevState.map((player) => {
         let undoArray = player.playerMoves.slice(0, -1);
-        return {
-          ...player,
-          playerMoves: [...undoArray],
-        };
+        if (gameType == "onePlayer") {
+          return {
+            ...player,
+            playerMoves: [...undoArray],
+          };
+        } else if (gameType == "twoPlayers") {
+          console.log();
+          return player.move == false
+            ? {
+                ...player,
+                playerMoves: [...undoArray],
+                move: true,
+              }
+            : {
+                ...player,
+                move: false,
+              };
+        }
       });
     });
+    if (gameType == "twoPlayers") {
+      const lastMove = historyMoves.pop();
+      setFields((prevState) => {
+        return prevState.map((field) => {
+          return lastMove == field.id ? { ...field, field: "" } : field;
+        });
+      });
+    } else if (gameType == "onePlayer") {
+      const lastMoveO = historyMoves.pop();
+      const lastMoveX = historyMoves.pop();
+      setFields((prevState) => {
+        return prevState.map((field) => {
+          return lastMoveO == field.id || lastMoveX == field.id
+            ? { ...field, field: "" }
+            : field;
+        });
+      });
+    }
   };
 
   return (
