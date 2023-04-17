@@ -9,8 +9,8 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="game/:gameType" element={<Game />} />
+        <Route path="/Tic-Tac-Toe-React" element={<Home />} />
+        <Route path="/Tic-Tac-Toe-React/game/:gameType" element={<Game />} />
       </Routes>
     </div>
   );
