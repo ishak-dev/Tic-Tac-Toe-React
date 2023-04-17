@@ -155,6 +155,11 @@
     font-size: 2.475rem;
   }
 }
+@media only screen and (max-width: 380px) {
+  .winner-bar {
+    font-size: 2rem;
+  }
+}
 
 @media only screen and (max-height: 780px) {
   .grid-container {
