@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../style/game.css";
 import { useParams } from "react-router-dom";
 import { GiBolas } from "react-icons/gi";
+import { ImUndo2 } from "react-icons/im";
 import Field from "../components/field";
 import PlayerBar from "../components/playerBar";
 import WinnerBar from "../components/winnerBar";
@@ -158,6 +159,28 @@ const Game = () => {
     handleClick(chooseField, "");
   };
 
+  const undo = () => {
+    const lastMoveO = historyMoves.pop();
+    const lastMoveX = historyMoves.pop();
+
+    setFields((prevState) => {
+      return prevState.map((field) => {
+        return lastMoveX == field.id || lastMoveO == field.id
+          ? { ...field, field: "" }
+          : field;
+      });
+    });
+    setPlayer((prevState) => {
+      return prevState.map((player) => {
+        let undoArray = player.playerMoves.slice(0, -1);
+        return {
+          ...player,
+          playerMoves: [...undoArray],
+        };
+      });
+    });
+  };
+
   return (
     <div className="game-container">
       <div className="winner-bar ">
@@ -174,7 +197,8 @@ const Game = () => {
         ))}
       </div>
       <div className="reset-section">
-        <GiBolas className="reset-icon" onClick={resetGame} />
+        <ImUndo2 className="undo-icon icon" onClick={undo} />
+        <GiBolas className="reset-icon icon" onClick={resetGame} />
       </div>
     </div>
   );
