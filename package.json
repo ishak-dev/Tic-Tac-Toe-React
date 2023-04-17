@@ -1,15 +1,13 @@
 {
-  "homepage": "http://ishak-dev.github.io/Tic-Tac-Toe-React",
   "name": "tic-tac-toe",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^18.2.0",
