@@ -48,17 +48,18 @@
   display: flex;
   max-width: 600px;
   margin: auto;
+  text-align: center;
 }
 .player {
   margin: 0px auto;
-  font-size: 46px;
+  font-size: 2.875rem;
 }
 .player p {
   margin-top: 0px;
   font-weight: bold;
 }
 .player-bar span {
-  font-size: 86px;
+  font-size: 5.375rem;
 }
 
 .player-first {
@@ -75,18 +76,23 @@
 }
 
 .winner-bar {
-  font-size: 75px;
   color: #ffff00;
   text-shadow: 2px 2px 8px #c84f32;
   text-align: center;
   transition: 2s;
-}
-.animation {
-  animation: winneranimation 1.4s linear;
+
+  margin: auto;
+
+  white-space: wrap;
+  font-size: 5.76rem;
 }
 .winner-bar p {
   margin-bottom: 0%;
   margin-top: 0%;
+}
+
+.animation {
+  animation: winneranimation 1.4s linear;
 }
 
 @keyframes winneranimation {
@@ -94,7 +100,7 @@
     transform: translateY(-300%);
   }
   20% {
-    transform: translateY(0%);
+    transform: translateY(0px);
   }
   40% {
     transform: translateY(-100%);
@@ -106,7 +112,7 @@
     transform: translateY(-50%);
   }
   100% {
-    transform: translateY(0%);
+    transform: translateY(-0%);
   }
 }
 
@@ -125,4 +131,21 @@
   color: #ffff00;
 
   box-shadow: 0px 0px 29px 3px #ffae00;
+}
+
+@media only screen and (max-width: 1130px) {
+  .winner-bar {
+    font-size: 4rem;
+  }
+}
+@media only screen and (max-width: 785px) {
+  .winner-bar {
+    font-size: 3rem;
+  }
+  .player {
+    font-size: 2rem;
+  }
+  .player-bar span {
+    font-size: 2.475rem;
+  }
 }

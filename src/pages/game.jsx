@@ -10,6 +10,7 @@ const Game = () => {
   const { gameType } = useParams();
   const [winner, setWinner] = useState({ player: "", winner: "" });
   const [historyMoves, setHistoryMoves] = useState([]);
+  const [botPlay, setBotPlay] = useState(false);
   const [symbol, setSymbol] = useState("X");
   const winningCombinations = [
     [1, 2, 3],
@@ -55,7 +56,6 @@ const Game = () => {
   ]);
 
   const handleClick = (id, field) => {
-    console.log(winner);
     if (winner.winner == true) return console.log("Winner already exist");
     if (field != "") return console.log("field must be empty");
     setFields((prevState) => {
@@ -70,6 +70,13 @@ const Game = () => {
     setHistoryMoves((prevHistory) => [...prevHistory, id]);
     setSymbol((prevState) => (prevState == "X" ? "O" : "X"));
   };
+
+  //AutoPlay
+  useEffect(() => {
+    if (historyMoves.length % 2 == 1 && historyMoves.length != 0) {
+      autoPlayer();
+    }
+  }, [symbol]);
 
   const handlePlayer = (id) => {
     setPlayer((prevState) => {
@@ -103,23 +110,28 @@ const Game = () => {
           return { ...prevState, player: id, winner: true };
         });
         result++;
-        localStorage.setItem(`player${id}`, result);
-        break;
+        return localStorage.setItem(`player${id}`, result);
       }
-      if (historyMoves.length == 9) {
-        console.log(historyMoves);
-        setWinner((prevState) => {
-          return { ...prevState, player: "none", winner: false };
-        });
-        break;
-      }
+    }
+    if (historyMoves.length == 9) {
+      setWinner((prevState) => {
+        return { ...prevState, player: "none", winner: false };
+      });
     }
   };
 
   const resetGame = () => {
     setPlayer((prevState) => {
       return prevState.map((player) => {
-        return { ...player, playerMoves: [] };
+        console.log(player);
+        return {
+          ...player,
+          playerMoves: [],
+          move: player.id == "1" ? true : false,
+          result: localStorage.getItem(`player${player.id}`)
+            ? localStorage.getItem(`player${player.id}`)
+            : 0,
+        };
       });
     });
     setFields((prevState) => {
@@ -131,6 +143,19 @@ const Game = () => {
       return { ...prevState, player: "", winner: "" };
     });
     setHistoryMoves([]);
+    setSymbol("X");
+  };
+
+  const autoPlayer = () => {
+    let randomField;
+    let availableFields = [];
+    for (let i = 1; i <= 9; i++) {
+      !historyMoves.includes(i) && availableFields.push(i);
+    }
+
+    randomField = Math.floor(Math.random() * (availableFields.length - 1)) + 0;
+    let chooseField = availableFields[randomField];
+    handleClick(chooseField, "");
   };
 
   return (
