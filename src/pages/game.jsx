@@ -73,11 +73,13 @@ const Game = () => {
   };
 
   //AutoPlay
-  useEffect(() => {
-    if (historyMoves.length % 2 == 1 && historyMoves.length != 0) {
-      autoPlayer();
-    }
-  }, [symbol]);
+  if (gameType == "onePlayer") {
+    useEffect(() => {
+      if (historyMoves.length % 2 == 1 && historyMoves.length != 0) {
+        autoPlayer();
+      }
+    }, [symbol]);
+  }
 
   const handlePlayer = (id) => {
     setPlayer((prevState) => {

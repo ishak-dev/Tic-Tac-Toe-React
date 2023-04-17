@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="home-section">
-      <button className="one-player-btn btn">
-        <Link to="game/newGame">One Player</Link>
-      </button>
-      <button className="two-players-btn btn">
-        <Link to="game" params={{ game: "twoPlayers" }} />
+      <Link className="one-player-btn btn" to="game/onePlayer">
+        One Player
+      </Link>
+
+      <Link className="two-players-btn btn" to="game/twoPlayers">
         Two Players
-      </button>
+      </Link>
     </div>
   );
 };
