@@ -11,7 +11,6 @@ const Game = () => {
   const { gameType } = useParams();
   const [winner, setWinner] = useState({ player: "", winner: "" });
   const [historyMoves, setHistoryMoves] = useState([]);
-  const [botPlay, setBotPlay] = useState(false);
   const [symbol, setSymbol] = useState("X");
   const winningCombinations = [
     [1, 2, 3],
@@ -81,6 +80,18 @@ const Game = () => {
     }, [symbol]);
   }
 
+  const autoPlayer = () => {
+    let randomField;
+    let availableFields = [];
+    for (let i = 1; i <= 9; i++) {
+      !historyMoves.includes(i) && availableFields.push(i);
+    }
+
+    randomField = Math.floor(Math.random() * (availableFields.length - 1)) + 0;
+    let chooseField = availableFields[randomField];
+    handleClick(chooseField, "");
+  };
+
   const handlePlayer = (id) => {
     setPlayer((prevState) => {
       return prevState.map((player) => {
@@ -96,12 +107,8 @@ const Game = () => {
   };
 
   useEffect(() => {
-    let lastPlayerMoves = players.find((player) => player.move === false);
-    checkWinner(
-      lastPlayerMoves.playerMoves,
-      lastPlayerMoves.id,
-      lastPlayerMoves.result
-    );
+    let player = players.find((player) => player.move === false);
+    checkWinner(player.playerMoves, player.id, player.result);
   }, [players]);
 
   const checkWinner = (playerCombinations, id, result) => {
@@ -147,18 +154,6 @@ const Game = () => {
     });
     setHistoryMoves([]);
     setSymbol("X");
-  };
-
-  const autoPlayer = () => {
-    let randomField;
-    let availableFields = [];
-    for (let i = 1; i <= 9; i++) {
-      !historyMoves.includes(i) && availableFields.push(i);
-    }
-
-    randomField = Math.floor(Math.random() * (availableFields.length - 1)) + 0;
-    let chooseField = availableFields[randomField];
-    handleClick(chooseField, "");
   };
 
   const undo = () => {
