@@ -73,6 +73,7 @@ const Game = () => {
 
   //AutoPlay
   if (gameType == "onePlayer") {
+    console.log("execute");
     useEffect(() => {
       if (historyMoves.length % 2 == 1 && historyMoves.length != 0) {
         autoPlayer();
@@ -187,6 +188,7 @@ const Game = () => {
           return lastMove == field.id ? { ...field, field: "" } : field;
         });
       });
+      setSymbol((prevSymbol) => (prevSymbol == "X" ? "O" : "X"));
     } else if (gameType == "onePlayer") {
       const lastMoveO = historyMoves.pop();
       const lastMoveX = historyMoves.pop();
