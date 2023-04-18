@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../style/game.css";
 import { useParams } from "react-router-dom";
 import { GiBolas } from "react-icons/gi";
@@ -11,7 +11,7 @@ const Game = () => {
   const { gameType } = useParams();
   const [winner, setWinner] = useState({ player: "", winner: "" });
   const [historyMoves, setHistoryMoves] = useState([]);
-  const [symbol, setSymbol] = useState("X");
+  const [playerOnMove, setPlayerOnMove] = useState(1);
   const winningCombinations = [
     [1, 2, 3],
     [4, 5, 6],
@@ -26,7 +26,7 @@ const Game = () => {
     {
       id: "1",
       playerMoves: [],
-      playerSymbol: "X",
+      symbol: "X",
       move: true,
       result: localStorage.getItem("player1")
         ? localStorage.getItem("player1")
@@ -35,7 +35,7 @@ const Game = () => {
     {
       id: "2",
       playerMoves: [],
-      playerSymbol: "O",
+      symbol: "O",
       move: false,
       result: localStorage.getItem("player2")
         ? localStorage.getItem("player2")
@@ -55,30 +55,35 @@ const Game = () => {
     { id: 9, field: "" },
   ]);
 
-  const handleClick = (id, field) => {
-    if (winner.winner == true) return console.log("Winner already exist");
+  const handleClick = (fieldId, field) => {
+    console.log(fieldId);
+    if (winner.winner) return console.log("Winner already exist");
     if (field != "") return console.log("field must be empty");
     setFields((prevState) => {
       return prevState.map((field) => {
-        return id == field.id && field.field == ""
-          ? { ...field, field: symbol }
+        return fieldId == field.id && field.field == ""
+          ? { ...field, field: getUserSymbol() }
           : field;
       });
     });
 
-    handlePlayer(id);
-    setHistoryMoves((prevHistory) => [...prevHistory, id]);
-    setSymbol((prevState) => (prevState == "X" ? "O" : "X"));
+    handlePlayer(fieldId);
+    setHistoryMoves((prevHistory) => [...prevHistory, fieldId]);
   };
 
-  //AutoPlay
+  const getUserSymbol = () => {
+    console.log(playerOnMove);
+    let player = players.find((player) => player.move === true);
+    return player.symbol;
+  };
+
+  //Autoplay
   if (gameType == "onePlayer") {
-    console.log("execute");
     useEffect(() => {
-      if (historyMoves.length % 2 == 1 && historyMoves.length != 0) {
-        autoPlayer();
+      if (getUserSymbol() === "O") {
+        setTimeout(() => autoPlayer(), 500);
       }
-    }, [symbol]);
+    }, [playerOnMove]);
   }
 
   const autoPlayer = () => {
@@ -87,9 +92,9 @@ const Game = () => {
     for (let i = 1; i <= 9; i++) {
       !historyMoves.includes(i) && availableFields.push(i);
     }
-
     randomField = Math.floor(Math.random() * (availableFields.length - 1)) + 0;
     let chooseField = availableFields[randomField];
+
     handleClick(chooseField, "");
   };
 
@@ -129,6 +134,9 @@ const Game = () => {
         return { ...prevState, player: "none", winner: false };
       });
     }
+    if (historyMoves.length != 0) {
+      setPlayerOnMove((prevMove) => (prevMove == 1 ? 2 : 1));
+    }
   };
 
   const resetGame = () => {
@@ -154,7 +162,6 @@ const Game = () => {
       return { ...prevState, player: "", winner: "" };
     });
     setHistoryMoves([]);
-    setSymbol("X");
   };
 
   const undo = () => {
@@ -167,7 +174,6 @@ const Game = () => {
             playerMoves: [...undoArray],
           };
         } else if (gameType == "twoPlayers") {
-          console.log();
           return player.move == false
             ? {
                 ...player,
@@ -188,8 +194,8 @@ const Game = () => {
           return lastMove == field.id ? { ...field, field: "" } : field;
         });
       });
-      setSymbol((prevSymbol) => (prevSymbol == "X" ? "O" : "X"));
     } else if (gameType == "onePlayer") {
+      console.log(historyMoves);
       const lastMoveO = historyMoves.pop();
       const lastMoveX = historyMoves.pop();
       setFields((prevState) => {
